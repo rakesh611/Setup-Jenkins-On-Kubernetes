@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: jenkins
+spec:
+  selector: 
+    app: jenkins-server
+  type: NodePort  
+  ports:
+    - name: http
+      protocol: "TCP" 
+      port: 8080
+      targetPort: 8080
+      nodePort: 30081   # Permanent NodePort for web access
+    - name: agent
+      protocol: "TCP"
+      port: 50000
+      targetPort: 50000
+      nodePort: 30082   # Permanent NodePort for agents
+
