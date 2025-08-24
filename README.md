@@ -1,4 +1,4 @@
-# Jenkins Deployment on Kubernetes
+<img width="1097" height="318" alt="image" src="https://github.com/user-attachments/assets/666537c4-4f30-4c0f-8f52-b39b0cec2987" /># Jenkins Deployment on Kubernetes
 
 This repository contains all the steps, YAML manifests, and troubleshooting steps for deploying Jenkins on a Kubernetes cluster.
 
@@ -14,17 +14,16 @@ This repository contains all the steps, YAML manifests, and troubleshooting step
   - [5. Exposing Jenkins Service](#5-exposing-jenkins-service)
   - [6. Access Jenkins](#6-access-jenkins)
 - [Troubleshooting](#troubleshooting)
-- | Issue                                          | Solution / Steps                                                                                                 |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `apt-get install vim` fails inside Jenkins pod | Install packages in Dockerfile before building custom image, or use container shell with `apt-get update` first. |
-| Jenkins pod stuck in `ContainerCreating`       | Check PV/PVC binding status, storage permissions, and pod events: `kubectl describe pod <pod>`                   |
-| NodePort not accessible                        | Ensure firewall allows port 30000, check node IP, verify service selector matches deployment labels.             |
-| Plugins not installing automatically           | Use Jenkins custom image with pre-installed plugins, or mount Jenkins home from PVC.                             |
-| Pod fails with `Permission denied` on volume   | Use `securityContext` in deployment: `fsGroup: 0, runAsUser: 0` for Jenkins container.                           |
-| Unable to access Jenkins externally            | Check Kubernetes networking, Node IP, service type, and cluster firewall rules.                                  |
-| Jenkins initialization stuck                   | Check pod logs for errors: `kubectl logs <jenkins-pod> -n jenkins` and ensure required plugins are installed.    |
+Issue	Steps Taken / Commands
+apt-get install vim fails inside pod	Used apt-get update && apt-get install -y vim in container shell. Built custom Jenkins image with tools.
+Pod stuck in ContainerCreating	Checked PVC and PV status: kubectl get pvc -n jenkins. Verified pod events: kubectl describe pod <pod> -n jenkins
+NodePort not accessible	Verified Node IP and firewall rules. Confirmed service selector matches deployment labels: kubectl get svc -n jenkins
+Plugins not installing	Built custom Jenkins image with pre-installed plugins using Dockerfile.
+Permission denied on volume	Added securityContext in deployment: fsGroup: 0, runAsUser: 0.
+Cannot access Jenkins externally	Checked cluster networking and firewall. NodePort 30000 allowed, browser using correct Node IP.
+Jenkins initialization stuck	Checked pod logs: kubectl logs <jenkins-pod> -n jenkins. Verified all plugins installed and container has enough resources.
+<img width="1097" height="318" alt="image" src="https://github.com/user-attachments/assets/b5a174eb-06e6-430a-950e-c079974e6d25" />
 
-- [References](#references)
 
 ---
 
